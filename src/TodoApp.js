@@ -6,23 +6,23 @@ import CreateTodo from './components/Todo/CreateTodo';
 import Header from './components/Header';
 
 class TodoApp extends Component {
-  constructor() {
-    super();
-    this.state = {
-      title: 'Your Todos',
+    state = {
+      title: 'My Todos',
       todos: [],
-      newTodoTitle: ''
-    };
-  }
+      newTodoTitle: '',
+    }
+
   componentWillMount() {
-    fetch('https://jsonplaceholder.typicode.com/todos', (data) => {
-      const todos = data.slice(0, 5).map(todo =>
-        CreateTodo(todo.title, todo.completed, todo.id)
-      );
-      this.setState({
-        todos
-      });
-    });
+    fetch('https://jsonplaceholder.typicode.com/todos')
+      .then(response => response.json())
+      .then(json => {
+        const todos = json.slice(0, 5).map(todo =>
+            CreateTodo(todo.title, todo.completed, todo.id)
+          );
+        this.setState({
+              todos
+            });
+      })
   }
   updateTodo = (updatedTodo) => {
     const todoIndex = this.state.todos.findIndex(t => t.id === updatedTodo.id);
